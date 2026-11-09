@@ -90,7 +90,7 @@ export const WebhookSettingsModal: React.FC<WebhookSettingsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-blue-100 text-blue-700 rounded-xl">
+            <div className="p-2 bg-[#ff7a7a]/15 text-[#ff7a7a] rounded-xl">
               <Settings className="w-5 h-5" />
             </div>
             <div>
@@ -113,12 +113,12 @@ export const WebhookSettingsModal: React.FC<WebhookSettingsModalProps> = ({
 
         {/* Corpo */}
         <div className="p-5 overflow-y-auto space-y-4 text-sm text-slate-700">
-          <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-2xl text-blue-950 text-xs leading-relaxed space-y-1">
-            <div className="font-bold flex items-center gap-1.5 text-blue-800">
-              <Globe className="w-4 h-4 text-blue-600" />
+          <div className="p-3.5 bg-rose-50/60 border border-rose-200/80 rounded-2xl text-slate-800 text-xs leading-relaxed space-y-1">
+            <div className="font-bold flex items-center gap-1.5 text-slate-900">
+              <Globe className="w-4 h-4 text-[#ff7a7a]" />
               <span>Compatibilidade Google Apps Script Ativa</span>
             </div>
-            <p className="text-[11px] text-blue-800">
+            <p className="text-[11px] text-slate-600">
               O aplicativo envia os dados via <code>Content-Type: text/plain</code> em modo <code>no-cors</code>. Isso contorna o erro de CORS preflight (OPTIONS) e permite que a função <code>doPost(e)</code> do Google Script receba os dados diretamente.
             </p>
           </div>
@@ -139,7 +139,7 @@ export const WebhookSettingsModal: React.FC<WebhookSettingsModalProps> = ({
                   value={currentUrl}
                   onChange={(e) => setCurrentUrl(e.target.value)}
                   placeholder="https://script.google.com/macros/s/.../exec"
-                  className="w-full pl-9 pr-3 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full pl-9 pr-3 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-[#ff7a7a] focus:border-[#ff7a7a]"
                 />
               </div>
               <p className="text-[11px] text-slate-500 mt-1">
@@ -150,7 +150,7 @@ export const WebhookSettingsModal: React.FC<WebhookSettingsModalProps> = ({
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <button
                 type="submit"
-                className="flex-1 py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                className="flex-1 py-2.5 px-4 bg-[#ff7a7a] hover:bg-[#f26a6a] active:bg-[#e85a5a] text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm shadow-[#ff7a7a]/25"
               >
                 <Check className="w-4 h-4" />
                 <span>Salvar URL</span>

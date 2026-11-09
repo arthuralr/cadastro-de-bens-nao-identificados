@@ -9,22 +9,6 @@ export interface PhotoAttachment {
   previewUrl: string;
 }
 
-export interface GeoLocationData {
-  latitude: number;
-  longitude: number;
-  accuracy: number;
-  capturedAt: string;
-}
-
-export interface InventoryAssetForm {
-  localizacao: string;
-  descricao: string;
-  categoria?: string;
-  estadoConservacao?: 'Bom' | 'Regular' | 'Danificado / Sucata' | 'Não identificado';
-  observacoes: string;
-  fotos: PhotoAttachment[];
-  geolocalizacao?: GeoLocationData | null;
-}
 
 export interface WebhookPayload {
   localizacao: string;

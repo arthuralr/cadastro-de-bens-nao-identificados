@@ -34,7 +34,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-blue-100 text-blue-700 rounded-xl">
+            <div className="p-2 bg-[#ff7a7a]/15 text-[#ff7a7a] rounded-xl">
               <History className="w-5 h-5" />
             </div>
             <div>

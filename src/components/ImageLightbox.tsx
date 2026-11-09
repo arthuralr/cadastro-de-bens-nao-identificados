@@ -23,7 +23,7 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({ photo, onClose }) 
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-900/90 text-white">
           <div className="flex items-center gap-2 min-w-0">
-            <ZoomIn className="w-4 h-4 text-blue-400 shrink-0" />
+            <ZoomIn className="w-4 h-4 text-[#ff7a7a] shrink-0" />
             <span className="text-sm font-medium truncate">{photo.name}</span>
           </div>
           <button
@@ -59,7 +59,7 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({ photo, onClose }) 
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-xs"
+            className="px-4 py-2 bg-[#ff7a7a] hover:bg-[#f26a6a] active:bg-[#e85a5a] text-white font-medium rounded-xl text-xs transition-colors"
           >
             Voltar
           </button>

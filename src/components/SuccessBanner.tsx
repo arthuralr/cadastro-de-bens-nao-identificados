@@ -53,7 +53,7 @@ export const SuccessBanner: React.FC<SuccessBannerProps> = ({
           <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-200/60">
             <span>📍 {location || 'Sem local informado'}</span>
             <span className="flex items-center gap-1 font-medium text-slate-700">
-              <Camera className="w-3.5 h-3.5 text-blue-600" />
+              <Camera className="w-3.5 h-3.5 text-[#ff7a7a]" />
               {photosCount} foto(s)
             </span>
           </div>
@@ -64,7 +64,7 @@ export const SuccessBanner: React.FC<SuccessBannerProps> = ({
           type="button"
           onClick={onNext}
           autoFocus
-          className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-blue-600/25 active:scale-[0.98] transition-all"
+          className="w-full py-4 px-6 bg-[#ff7a7a] hover:bg-[#f26a6a] active:bg-[#e85a5a] text-white font-bold rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-[#ff7a7a]/25 active:scale-[0.98] transition-all"
         >
           <PlusCircle className="w-5 h-5" />
           <span>Registrar Próximo Bem</span>

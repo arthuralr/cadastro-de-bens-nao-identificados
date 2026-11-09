@@ -103,7 +103,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
           onClick={() => cameraInputRef.current?.click()}
           className={`flex items-center justify-center gap-2 py-3.5 px-3 rounded-2xl font-semibold text-sm transition-all shadow-sm active:scale-[0.98] min-h-[52px] ${
             remaining > 0 && !isProcessing
-              ? 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-blue-600/20'
+              ? 'bg-[#ff7a7a] text-white hover:bg-[#f26a6a] active:bg-[#e85a5a] shadow-[#ff7a7a]/25'
               : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
           }`}
         >
@@ -145,7 +145,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
           <div
             key={photo.id}
             onClick={() => setLightboxPhoto(photo)}
-            className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-100 border-2 border-slate-200 shadow-sm cursor-pointer hover:border-blue-400 transition-all"
+            className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-100 border-2 border-slate-200 shadow-sm cursor-pointer hover:border-[#ff7a7a] transition-all"
           >
             <img
               src={photo.base64 || photo.previewUrl}
@@ -189,7 +189,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
               key={`empty-${slotNumber}`}
               type="button"
               onClick={() => cameraInputRef.current?.click()}
-              className="aspect-square rounded-2xl border-2 border-dashed border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50/30 flex flex-col items-center justify-center text-slate-400 hover:text-blue-600 transition-colors p-2 text-center"
+              className="aspect-square rounded-2xl border-2 border-dashed border-slate-300 hover:border-[#ff7a7a] bg-white hover:bg-[#ff7a7a]/5 flex flex-col items-center justify-center text-slate-400 hover:text-[#ff7a7a] transition-colors p-2 text-center"
             >
               <Camera className="w-5 h-5 mb-1 opacity-60" />
               <span className="text-[11px] font-medium leading-tight">
