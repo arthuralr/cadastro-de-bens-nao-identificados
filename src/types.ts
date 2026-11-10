@@ -31,3 +31,8 @@ export interface HistoryRecord {
   respostaWebhook?: string;
   fotosPreviews?: string[];
 }
+
+export interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}

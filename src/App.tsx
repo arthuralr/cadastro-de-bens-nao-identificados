@@ -18,17 +18,17 @@ import {
   PackagePlus,
   PackageX,
   History,
-  AlertTriangle
+  AlertTriangle,
+  Download
 } from 'lucide-react';
 
 import { Header } from './components/Header';
 import { PhotoUploader } from './components/PhotoUploader';
 import { SuccessBanner } from './components/SuccessBanner';
 import { HistoryDrawer } from './components/HistoryDrawer';
-import { PWAInstallBanner } from './components/PWAInstallBanner';
 import { PendingSyncBanner } from './components/PendingSyncBanner';
 
-import { PhotoAttachment, HistoryRecord, WebhookPayload } from './types';
+import { PhotoAttachment, HistoryRecord, WebhookPayload, BeforeInstallPromptEvent } from './types';
 import { 
   getActiveWebhookUrl, 
   STORAGE_KEYS, 
@@ -76,6 +76,64 @@ export default function App() {
   const isOnline = useOnlineStatus();
   const [pendingRecords, setPendingRecords] = useState<PendingRecord[]>([]);
   const [isOfflineSaved, setIsOfflineSaved] = useState(false);
+
+  // Estado e captura do evento de instalação PWA (beforeinstallprompt)
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isStandalone, setIsStandalone] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as unknown as { standalone?: boolean }).standalone === true
+    );
+  });
+
+  // Escuta o evento beforeinstallprompt do navegador
+  useEffect(() => {
+    const checkStandalone = () => {
+      const standalone =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+      setIsStandalone(standalone);
+    };
+
+    checkStandalone();
+
+    const handleBeforeInstallPrompt = (e: Event) => {
+      // Impede o banner padrão automático e armazena o evento
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+    };
+
+    const handleAppInstalled = () => {
+      setDeferredPrompt(null);
+      setIsStandalone(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  // Ação de instalação chamada ao clicar no botão de destaque
+  const handleInstallApp = async () => {
+    if (!deferredPrompt) return;
+    try {
+      await deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice.outcome === 'accepted') {
+        setIsStandalone(true);
+      }
+    } catch (err) {
+      console.error('Erro ao acionar prompt de instalação:', err);
+    } finally {
+      // Esconde o botão após a interação do utilizador
+      setDeferredPrompt(null);
+    }
+  };
 
   // Carregar e sincronizar contagem de registros pendentes no IndexedDB
   const refreshPending = async () => {
@@ -383,8 +441,36 @@ export default function App() {
         {/* ======================================================== */}
         {currentView === 'menu' && (
           <div className="space-y-4 animate-in fade-in duration-150">
-            {/* Banner de Instalação PWA */}
-            <PWAInstallBanner />
+            {/* Botão de Destaque: Instalar Aplicativo (PWA) */}
+            {deferredPrompt && !isStandalone && (
+              <button
+                type="button"
+                onClick={handleInstallApp}
+                className="w-full p-4 bg-[#1f2937] hover:bg-slate-800 text-white rounded-2xl border-2 border-[#ff7a7a] shadow-md transition-all active:scale-[0.98] text-left flex items-center justify-between group cursor-pointer animate-in fade-in slide-in-from-top-2 duration-200"
+              >
+                <div className="flex items-center gap-3.5 min-w-0 pr-2">
+                  <div className="w-12 h-12 rounded-xl bg-[#ff7a7a] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                    <Download className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-base font-bold text-white group-hover:text-[#ff7a7a] transition-colors leading-snug">
+                        Instalar Aplicativo
+                      </h3>
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#ff7a7a]/25 text-[#ff7a7a] border border-[#ff7a7a]/40">
+                        PWA
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-300 mt-0.5 leading-relaxed">
+                      Instale no seu telemóvel para acesso rápido em tela cheia e coleta offline
+                    </p>
+                  </div>
+                </div>
+                <div className="w-8 h-8 rounded-lg bg-gray-700/70 group-hover:bg-[#ff7a7a] text-gray-300 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
+                  <Download className="w-4 h-4" />
+                </div>
+              </button>
+            )}
 
             {/* Banner de Sincronização de Registros Offline (IndexedDB) */}
             <PendingSyncBanner
