@@ -75,6 +75,20 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded ${
+                        item.tipo === 'inservivel' 
+                          ? 'bg-amber-100 text-amber-800 border border-amber-200' 
+                          : 'bg-[#ff7a7a]/15 text-[#ff7a7a] border border-[#ff7a7a]/25'
+                      }`}>
+                        {item.tipo === 'inservivel' ? 'Inservível' : 'Sobra'}
+                      </span>
+                      {item.estado_conservacao && (
+                        <span className="text-[10px] font-semibold text-slate-600 bg-slate-200/80 px-1.5 py-0.2 rounded">
+                          {item.estado_conservacao}
+                        </span>
+                      )}
+                    </div>
                     <h4 className="text-sm font-bold text-slate-900 truncate">
                       {item.descricao}
                     </h4>

@@ -109,3 +109,12 @@ export const ESTADOS_CONSERVACAO = [
   'Danificado / Sucata (Inoperante)',
   'Aguardando Avaliação Técnica',
 ];
+
+// Opções obrigatórias para o formulário de Bem Inservível
+export const CLASSIFICACOES_INSERVIVEL = [
+  'Ocioso',
+  'Recuperável',
+  'Antieconômico',
+  'Irrecuperável (Sucata)',
+] as const;
+

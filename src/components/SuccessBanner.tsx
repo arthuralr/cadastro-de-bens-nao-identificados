@@ -4,6 +4,7 @@ import { CheckCircle2, PlusCircle, ArrowRight, Camera } from 'lucide-react';
 interface SuccessBannerProps {
   isOpen: boolean;
   onNext: () => void;
+  onBackToMenu?: () => void;
   assetDescription: string;
   location: string;
   photosCount: number;
@@ -12,6 +13,7 @@ interface SuccessBannerProps {
 export const SuccessBanner: React.FC<SuccessBannerProps> = ({
   isOpen,
   onNext,
+  onBackToMenu,
   assetDescription,
   location,
   photosCount,
@@ -24,7 +26,7 @@ export const SuccessBanner: React.FC<SuccessBannerProps> = ({
       onClick={onNext}
     >
       <div 
-        className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl border border-slate-200 p-6 text-center space-y-5 animate-in zoom-in-95 duration-200"
+        className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl border border-slate-200 p-6 text-center space-y-4 animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Ícone de Sucesso */}
@@ -33,7 +35,7 @@ export const SuccessBanner: React.FC<SuccessBannerProps> = ({
         </div>
 
         {/* Título & Mensagem */}
-        <div className="space-y-1.5">
+        <div className="space-y-1">
           <h3 className="text-xl font-bold text-slate-900 tracking-tight">
             Item Registrado com Sucesso!
           </h3>
@@ -59,17 +61,29 @@ export const SuccessBanner: React.FC<SuccessBannerProps> = ({
           </div>
         </div>
 
-        {/* Botão Principal de Próxima Coleta */}
-        <button
-          type="button"
-          onClick={onNext}
-          autoFocus
-          className="w-full py-4 px-6 bg-[#ff7a7a] hover:bg-[#f26a6a] active:bg-[#e85a5a] text-white font-bold rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-[#ff7a7a]/25 active:scale-[0.98] transition-all"
-        >
-          <PlusCircle className="w-5 h-5" />
-          <span>Registrar Próximo Bem</span>
-          <ArrowRight className="w-4 h-4 ml-1 opacity-70" />
-        </button>
+        {/* Botões de Ação */}
+        <div className="space-y-2 pt-1">
+          <button
+            type="button"
+            onClick={onNext}
+            autoFocus
+            className="w-full py-3.5 px-5 bg-[#ff7a7a] hover:bg-[#f26a6a] active:bg-[#e85a5a] text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm shadow-[#ff7a7a]/25 active:scale-[0.98] transition-all"
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span>Registrar Próximo Bem</span>
+            <ArrowRight className="w-4 h-4 ml-1 opacity-70" />
+          </button>
+
+          {onBackToMenu && (
+            <button
+              type="button"
+              onClick={onBackToMenu}
+              className="w-full py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors"
+            >
+              <span>Voltar ao Menu Inicial</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

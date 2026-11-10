@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { PackageSearch, Settings, History, Wifi, WifiOff } from 'lucide-react';
+import { PackageSearch, Settings, History, Wifi, WifiOff, ArrowLeft } from 'lucide-react';
 
 interface HeaderProps {
   collectedCount: number;
   onOpenHistory: () => void;
   onOpenSettings: () => void;
   isConfigured: boolean;
+  currentView?: 'menu' | 'sobra' | 'inservivel';
+  onBackToMenu?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -13,6 +15,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenHistory,
   onOpenSettings,
   isConfigured,
+  currentView = 'menu',
+  onBackToMenu,
 }) => {
   const [isOnline, setIsOnline] = useState(
     typeof navigator !== 'undefined' ? navigator.onLine : true
@@ -36,9 +40,22 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Marca / Identidade Betha Patrimônio */}
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-xl bg-[#ff7a7a] flex items-center justify-center text-white shadow-sm shrink-0">
-            <PackageSearch className="w-5 h-5 text-white" />
-          </div>
+          {currentView !== 'menu' && onBackToMenu ? (
+            <button
+              type="button"
+              onClick={onBackToMenu}
+              className="w-10 h-10 rounded-xl bg-gray-700/80 hover:bg-gray-700 text-[#ff7a7a] flex items-center justify-center transition-all active:scale-95 border border-gray-600/50 shrink-0"
+              title="Voltar ao Menu Inicial"
+              aria-label="Voltar ao Menu Inicial"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          ) : (
+            <div className="w-10 h-10 rounded-xl bg-[#ff7a7a] flex items-center justify-center text-white shadow-sm shrink-0">
+              <PackageSearch className="w-5 h-5 text-white" />
+            </div>
+          )}
+
           <div>
             <h1 className="text-base font-bold tracking-tight leading-none text-white flex items-center gap-2">
               Patrimônio
@@ -47,7 +64,11 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </h1>
             <p className="text-xs text-gray-400 mt-0.5 leading-tight">
-              Registro de bens sem plaqueta
+              {currentView === 'menu'
+                ? 'Coleta de Inventário em Campo'
+                : currentView === 'sobra'
+                ? 'Bem Não Cadastrado (Sobra)'
+                : 'Registo de Bem Inservível'}
             </p>
           </div>
         </div>

@@ -221,15 +221,19 @@ export const WebhookSettingsModal: React.FC<WebhookSettingsModalProps> = ({
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   
   // Payload recebido:
-  // data.localizacao (string)
-  // data.descricao   (string)
-  // data.observacoes (string)
-  // data.fotos       (array de strings Base64)
+  // data.tipo               ("sobra" ou "inservivel")
+  // data.localizacao        (string)
+  // data.descricao          (string)
+  // data.estado_conservacao (string, presente se inservível)
+  // data.observacoes        (string)
+  // data.fotos              (array de strings Base64)
   
   sheet.appendRow([
     new Date(),
+    data.tipo,
     data.localizacao,
     data.descricao,
+    data.estado_conservacao || "N/A",
     data.observacoes,
     data.fotos.length
   ]);
