@@ -1,39 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { PackageSearch, Settings, History, Wifi, WifiOff, ArrowLeft } from 'lucide-react';
+import React from 'react';
+import { PackageSearch, History, ArrowLeft } from 'lucide-react';
+import { useOnlineStatus } from '../utils/useOnlineStatus';
 
 interface HeaderProps {
   collectedCount: number;
   onOpenHistory: () => void;
-  onOpenSettings: () => void;
-  isConfigured: boolean;
   currentView?: 'menu' | 'sobra' | 'inservivel';
   onBackToMenu?: () => void;
+  isOnline?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   collectedCount,
   onOpenHistory,
-  onOpenSettings,
-  isConfigured,
   currentView = 'menu',
   onBackToMenu,
+  isOnline: propIsOnline,
 }) => {
-  const [isOnline, setIsOnline] = useState(
-    typeof navigator !== 'undefined' ? navigator.onLine : true
-  );
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  const hookOnline = useOnlineStatus();
+  const isOnline = propIsOnline !== undefined ? propIsOnline : hookOnline;
 
   return (
     <header className="sticky top-0 z-30 bg-[#1f2937] text-white border-b border-gray-700/70 shadow-md">
@@ -75,16 +60,19 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Ações da Barra Superior */}
         <div className="flex items-center gap-1.5">
-          {/* Indicador de Conexão */}
+          {/* Indicador de Conexão: Online (verde) / Offline (vermelho) */}
           <div 
-            className="flex items-center justify-center w-8 h-8 rounded-xl text-xs"
-            title={isOnline ? 'Conexão ativa' : 'Sem conexão com a internet'}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border transition-all ${
+              isOnline
+                ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40 shadow-xs'
+                : 'bg-rose-950/80 text-rose-300 border-rose-500/50 shadow-xs animate-pulse'
+            }`}
+            title={isOnline ? 'Dispositivo Online (Conexão ativa)' : 'Dispositivo Offline (Sem conexão - envios serão salvos localmente)'}
           >
-            {isOnline ? (
-              <Wifi className="w-4 h-4 text-emerald-400" />
-            ) : (
-              <WifiOff className="w-4 h-4 text-amber-400" />
-            )}
+            <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-400' : 'bg-rose-500'}`} />
+            <span className="text-[11px] font-bold tracking-tight">
+              {isOnline ? 'Online' : 'Offline'}
+            </span>
           </div>
 
           {/* Botão de Histórico da Sessão */}
@@ -101,24 +89,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-[#ff7a7a] text-[10px] font-bold text-white shadow-xs">
                 {collectedCount}
               </span>
-            )}
-          </button>
-
-          {/* Botão de Configuração de Webhook */}
-          <button
-            type="button"
-            onClick={onOpenSettings}
-            className={`relative p-2 rounded-xl text-xs font-medium transition-colors active:scale-95 border ${
-              !isConfigured
-                ? 'bg-amber-500/20 text-amber-300 border-amber-400/40'
-                : 'bg-gray-700/70 text-gray-300 hover:bg-gray-700 border-gray-600/50'
-            }`}
-            title="Configurar URL do Webhook"
-            aria-label="Configurar Webhook"
-          >
-            <Settings className="w-4 h-4" />
-            {!isConfigured && (
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#ff7a7a] rounded-full ring-2 ring-[#1f2937]" />
             )}
           </button>
         </div>

@@ -12,8 +12,7 @@ import {
   AlertCircle, 
   MapPin, 
   ChevronDown, 
-  ChevronRight,
-  Settings, 
+  ChevronRight, 
   RotateCcw,
   ArrowLeft,
   PackagePlus,
@@ -25,8 +24,9 @@ import {
 import { Header } from './components/Header';
 import { PhotoUploader } from './components/PhotoUploader';
 import { SuccessBanner } from './components/SuccessBanner';
-import { WebhookSettingsModal } from './components/WebhookSettingsModal';
 import { HistoryDrawer } from './components/HistoryDrawer';
+import { PWAInstallBanner } from './components/PWAInstallBanner';
+import { PendingSyncBanner } from './components/PendingSyncBanner';
 
 import { PhotoAttachment, HistoryRecord, WebhookPayload } from './types';
 import { 
@@ -36,6 +36,12 @@ import {
   ESTADOS_CONSERVACAO,
   CLASSIFICACOES_INSERVIVEL
 } from './config';
+import { useOnlineStatus } from './utils/useOnlineStatus';
+import { 
+  savePendingRecord, 
+  getPendingRecords, 
+  PendingRecord 
+} from './utils/offlineDb';
 
 type AppView = 'menu' | 'sobra' | 'inservivel';
 
@@ -64,9 +70,37 @@ export default function App() {
     photosCount: number;
   }>({ descricao: '', localizacao: '', photosCount: 0 });
 
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
-  const [activeWebhook, setActiveWebhook] = useState(() => getActiveWebhookUrl());
+
+  // Conexão e armazenamento offline
+  const isOnline = useOnlineStatus();
+  const [pendingRecords, setPendingRecords] = useState<PendingRecord[]>([]);
+  const [isOfflineSaved, setIsOfflineSaved] = useState(false);
+
+  // Carregar e sincronizar contagem de registros pendentes no IndexedDB
+  const refreshPending = async () => {
+    try {
+      const records = await getPendingRecords();
+      setPendingRecords(records);
+    } catch (e) {
+      console.warn('Erro ao atualizar lista de pendentes:', e);
+    }
+  };
+
+  useEffect(() => {
+    refreshPending();
+  }, []);
+
+  // Quando um registro pendente é sincronizado com o Webhook
+  const handleRecordSynced = (syncedId: string) => {
+    setHistory((prev) =>
+      prev.map((rec) =>
+        rec.id === syncedId
+          ? { ...rec, status: 'sucesso', respostaWebhook: 'Entregue com sucesso após sincronização' }
+          : rec
+      )
+    );
+  };
 
   // History stored in localStorage
   const [history, setHistory] = useState<HistoryRecord[]>(() => {
@@ -188,6 +222,60 @@ export default function App() {
       };
     }
 
+    // ========================================================
+    // INTERCEPTAÇÃO OFFLINE: Se sem rede, guarda no IndexedDB
+    // ========================================================
+    if (!isOnline) {
+      try {
+        const savedOffline = await savePendingRecord(
+          payload,
+          fotos.map((f) => f.base64 || f.previewUrl)
+        );
+
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+          try {
+            navigator.vibrate([100, 50, 100]);
+          } catch {
+            // ignore
+          }
+        }
+
+        const registroOffline: HistoryRecord = {
+          id: savedOffline.id,
+          tipo: currentView === 'inservivel' ? 'inservivel' : 'sobra',
+          timestamp: timestampAtual,
+          localizacao: localizacao.trim(),
+          descricao: descricao.trim(),
+          estado_conservacao: currentView === 'inservivel' ? classificacaoEstado.trim() : undefined,
+          totalFotos: fotos.length,
+          status: 'offline',
+          respostaWebhook: 'Salvo offline no IndexedDB',
+          fotosPreviews: fotos.map((f) => f.base64 || f.previewUrl),
+        };
+
+        setHistory((prev) => [registroOffline, ...prev]);
+
+        setLastSubmitted({
+          descricao: descricao.trim(),
+          localizacao: localizacao.trim(),
+          photosCount: fotos.length,
+        });
+
+        setIsOfflineSaved(true);
+        setShowSuccessModal(true);
+        handleResetForm();
+        await refreshPending();
+      } catch (errOffline) {
+        console.error('Falha ao salvar offline:', errOffline);
+        setErrorMessage('Não foi possível gravar os dados localmente no IndexedDB.');
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    setIsOfflineSaved(false);
+
     let envioStatus: 'sucesso' | 'erro' | 'simulado' = 'sucesso';
     let respostaTexto = '';
 
@@ -276,18 +364,15 @@ export default function App() {
     }
   };
 
-  const isConfigured = !activeWebhook.includes('YOUR_SCRIPT_ID') && !activeWebhook.includes('placeholder');
-
   return (
     <div className="min-h-screen bg-[#f3f4f6] flex flex-col text-slate-800">
       {/* Barra de Topo */}
       <Header
         collectedCount={history.length}
         onOpenHistory={() => setShowHistoryModal(true)}
-        onOpenSettings={() => setShowSettingsModal(true)}
-        isConfigured={isConfigured}
         currentView={currentView}
         onBackToMenu={() => handleNavigate('menu')}
+        isOnline={isOnline}
       />
 
       {/* Conteúdo Principal (Mobile-First Canvas) */}
@@ -298,6 +383,17 @@ export default function App() {
         {/* ======================================================== */}
         {currentView === 'menu' && (
           <div className="space-y-4 animate-in fade-in duration-150">
+            {/* Banner de Instalação PWA */}
+            <PWAInstallBanner />
+
+            {/* Banner de Sincronização de Registros Offline (IndexedDB) */}
+            <PendingSyncBanner
+              pendingRecords={pendingRecords}
+              isOnline={isOnline}
+              onSyncComplete={refreshPending}
+              onRecordSynced={handleRecordSynced}
+            />
+
             {/* Título de Boas-Vindas */}
             <div className="space-y-1 text-center sm:text-left py-1">
               <h2 className="text-xl font-bold text-slate-900 tracking-tight">
@@ -643,16 +739,6 @@ export default function App() {
                   <span>Erro no Envio para o Webhook</span>
                 </div>
                 <p className="leading-relaxed text-[11px]">{errorMessage}</p>
-                <div className="flex items-center gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => setShowSettingsModal(true)}
-                    className="px-3 py-1.5 bg-[#ff7a7a] hover:bg-[#f26a6a] text-white rounded-xl text-xs font-semibold flex items-center gap-1 transition-colors"
-                  >
-                    <Settings className="w-3.5 h-3.5" />
-                    <span>Ajustar URL do Webhook</span>
-                  </button>
-                </div>
               </div>
             )}
 
@@ -709,14 +795,9 @@ export default function App() {
         assetDescription={lastSubmitted.descricao}
         location={lastSubmitted.localizacao}
         photosCount={lastSubmitted.photosCount}
+        isOfflineSaved={isOfflineSaved}
       />
 
-      {/* Modal de Configuração do Webhook */}
-      <WebhookSettingsModal
-        isOpen={showSettingsModal}
-        onClose={() => setShowSettingsModal(false)}
-        onUrlUpdated={(url) => setActiveWebhook(url)}
-      />
 
       {/* Drawer de Histórico de Coletas */}
       <HistoryDrawer

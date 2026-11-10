@@ -102,6 +102,10 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       Enviado
                     </span>
+                  ) : item.status === 'offline' ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-full shrink-0">
+                      Pendente (Offline)
+                    </span>
                   ) : item.status === 'simulado' ? (
                     <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full shrink-0">
                       Simulado

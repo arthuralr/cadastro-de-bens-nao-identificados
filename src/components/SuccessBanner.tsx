@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, PlusCircle, ArrowRight, Camera } from 'lucide-react';
+import { CheckCircle2, PlusCircle, ArrowRight, Camera, CloudOff } from 'lucide-react';
 
 interface SuccessBannerProps {
   isOpen: boolean;
@@ -8,6 +8,8 @@ interface SuccessBannerProps {
   assetDescription: string;
   location: string;
   photosCount: number;
+  isOfflineSaved?: boolean;
+  customMessage?: string;
 }
 
 export const SuccessBanner: React.FC<SuccessBannerProps> = ({
@@ -17,6 +19,8 @@ export const SuccessBanner: React.FC<SuccessBannerProps> = ({
   assetDescription,
   location,
   photosCount,
+  isOfflineSaved = false,
+  customMessage,
 }) => {
   if (!isOpen) return null;
 
@@ -30,17 +34,27 @@ export const SuccessBanner: React.FC<SuccessBannerProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Ícone de Sucesso */}
-        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
-          <CheckCircle2 className="w-9 h-9" />
+        <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto shadow-inner ${
+          isOfflineSaved ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'
+        }`}>
+          {isOfflineSaved ? (
+            <CloudOff className="w-9 h-9" />
+          ) : (
+            <CheckCircle2 className="w-9 h-9" />
+          )}
         </div>
 
         {/* Título & Mensagem */}
         <div className="space-y-1">
           <h3 className="text-xl font-bold text-slate-900 tracking-tight">
-            Item Registrado com Sucesso!
+            {isOfflineSaved ? 'Salvo Offline com Sucesso!' : 'Item Registrado com Sucesso!'}
           </h3>
-          <p className="text-xs text-slate-500">
-            Os dados e fotos foram convertidos e transmitidos para o webhook.
+          <p className="text-xs text-slate-600">
+            {customMessage || (
+              isOfflineSaved
+                ? 'Salvo offline. Será sincronizado quando houver ligação.'
+                : 'Os dados e fotos foram convertidos e transmitidos para o webhook.'
+            )}
           </p>
         </div>
 

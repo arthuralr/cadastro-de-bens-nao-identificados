@@ -27,7 +27,7 @@ export interface HistoryRecord {
   descricao: string;
   estado_conservacao?: string;
   totalFotos: number;
-  status: 'sucesso' | 'erro' | 'simulado';
+  status: 'sucesso' | 'erro' | 'simulado' | 'offline';
   respostaWebhook?: string;
   fotosPreviews?: string[];
 }
