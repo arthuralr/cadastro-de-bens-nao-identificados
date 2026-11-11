@@ -120,6 +120,8 @@ export const LOCAIS_PREDEFINIDOS = [
   'Serviço De Inspeção Municipal - Sim',
   'SETOR DE EMPENHOS',
   'SETOR DE FISCALIZAÇÃO',
+  'Tributos',
+  'Veterinária',
 ] as const;
 
 export const ESTADOS_CONSERVACAO = [
