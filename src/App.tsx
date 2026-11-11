@@ -483,14 +483,14 @@ export default function App() {
             {/* Título de Boas-Vindas */}
             <div className="space-y-1 text-center sm:text-left py-1">
               <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-                Selecione o Tipo de Registo
+                Selecione o Tipo de Registro
               </h2>
               <p className="text-xs text-slate-500">
                 Escolha a operação patrimonial para iniciar a coleta em campo
               </p>
             </div>
 
-            {/* BOTÃO 1: REGISTAR BEM NÃO CADASTRADO (SOBRA FÍSICA) */}
+            {/* BOTÃO 1: REGISTRAR BEM NÃO CADASTRADO (SOBRA FÍSICA) */}
             <button
               type="button"
               onClick={() => handleNavigate('sobra')}
@@ -502,7 +502,7 @@ export default function App() {
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-900 group-hover:text-[#ff7a7a] transition-colors leading-snug">
-                    Registar Bem Não Cadastrado (Sobra Física)
+                    Registrar Bem Não Cadastrado (Sobra Física)
                   </h3>
                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                     Itens patrimoniais encontrados sem plaqueta de tombamento para inventário.
@@ -512,7 +512,7 @@ export default function App() {
               <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-[#ff7a7a] group-hover:translate-x-0.5 transition-all shrink-0" />
             </button>
 
-            {/* BOTÃO 2: REGISTAR BEM INSERVÍVEL */}
+            {/* BOTÃO 2: REGISTRAR BEM INSERVÍVEL */}
             <button
               type="button"
               onClick={() => handleNavigate('inservivel')}
@@ -524,7 +524,7 @@ export default function App() {
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-900 group-hover:text-amber-600 transition-colors leading-snug">
-                    Registar Bem Inservível
+                    Registrar Bem Inservível
                   </h3>
                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                     Classificação de bens ociosos, recuperáveis, antieconômicos ou sucata.
@@ -540,8 +540,8 @@ export default function App() {
                 <History className="w-4 h-4 text-[#ff7a7a]" />
                 <span>
                   {history.length === 0
-                    ? 'Nenhum registo efetuado hoje'
-                    : `${history.length} registo(s) efetuado(s) nesta sessão`}
+                    ? 'Nenhum registro efetuado hoje'
+                    : `${history.length} registro(s) efetuado(s) nesta sessão`}
                 </span>
               </div>
               {history.length > 0 && (
@@ -592,12 +592,12 @@ export default function App() {
                 {currentView === 'sobra' ? (
                   <>
                     <PackagePlus className="w-5 h-5 text-[#ff7a7a] shrink-0" />
-                    <span>Registo de Bem Não Cadastrado</span>
+                    <span>Registro de Bem Não Cadastrado</span>
                   </>
                 ) : (
                   <>
                     <PackageX className="w-5 h-5 text-amber-600 shrink-0" />
-                    <span>Registo de Bem Inservível</span>
+                    <span>Registro de Bem Inservível</span>
                   </>
                 )}
               </h2>

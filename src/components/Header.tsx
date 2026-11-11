@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
                 ? 'Coleta de Inventário em Campo'
                 : currentView === 'sobra'
                 ? 'Bem Não Cadastrado (Sobra)'
-                : 'Registo de Bem Inservível'}
+                : 'Registro de Bem Inservível'}
             </p>
           </div>
         </div>

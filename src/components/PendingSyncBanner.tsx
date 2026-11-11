@@ -78,12 +78,12 @@ export const PendingSyncBanner: React.FC<PendingSyncBannerProps> = ({
     if (falhas === 0) {
       setSyncFeedback({
         type: 'success',
-        message: `Todos os ${sucessos} registo(s) foram sincronizados com sucesso!`,
+        message: `Todos os ${sucessos} registro(s) foram sincronizados com sucesso!`,
       });
     } else {
       setSyncFeedback({
         type: 'error',
-        message: `${sucessos} registo(s) sincronizado(s). ${falhas} falha(s). Verifique a conexão e tente novamente.`,
+        message: `${sucessos} registro(s) sincronizado(s). ${falhas} falha(s). Verifique a conexão e tente novamente.`,
       });
     }
 
@@ -103,7 +103,7 @@ export const PendingSyncBanner: React.FC<PendingSyncBannerProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-bold text-amber-950 flex items-center gap-2">
-              <span>{count} {count === 1 ? 'registo pendente de envio' : 'registos pendentes de envio'}</span>
+              <span>{count} {count === 1 ? 'registro pendente de envio' : 'registros pendentes de envio'}</span>
               <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-200 text-amber-900 border border-amber-300">
                 IndexedDB
               </span>
