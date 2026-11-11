@@ -490,7 +490,7 @@ export default function App() {
               </p>
             </div>
 
-            {/* BOTÃO 1: REGISTAR BEM NÃO CADASTRADO (SOBRA FÍSICA) */}
+            {/* BOTÃO 1: REGISTRAR BEM NÃO CADASTRADO (SOBRA FÍSICA) */}
             <button
               type="button"
               onClick={() => handleNavigate('sobra')}
@@ -502,7 +502,7 @@ export default function App() {
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-900 group-hover:text-[#ff7a7a] transition-colors leading-snug">
-                    Registar Bem Não Cadastrado (Sobra Física)
+                    Registrar Bem Não Cadastrado (Sobra Física)
                   </h3>
                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                     Itens patrimoniais encontrados sem plaqueta de tombamento para inventário.
@@ -512,7 +512,7 @@ export default function App() {
               <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-[#ff7a7a] group-hover:translate-x-0.5 transition-all shrink-0" />
             </button>
 
-            {/* BOTÃO 2: REGISTAR BEM INSERVÍVEL */}
+            {/* BOTÃO 2: REGISTRAR BEM INSERVÍVEL */}
             <button
               type="button"
               onClick={() => handleNavigate('inservivel')}
@@ -524,7 +524,7 @@ export default function App() {
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-900 group-hover:text-amber-600 transition-colors leading-snug">
-                    Registar Bem Inservível
+                    Registrar Bem Inservível
                   </h3>
                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                     Classificação de bens ociosos, recuperáveis, antieconômicos ou sucata.
