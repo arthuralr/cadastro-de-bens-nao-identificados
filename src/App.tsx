@@ -483,7 +483,7 @@ export default function App() {
             {/* Título de Boas-Vindas */}
             <div className="space-y-1 text-center sm:text-left py-1">
               <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-                Selecione o Tipo de Registo
+                Selecione o Tipo de Registro
               </h2>
               <p className="text-xs text-slate-500">
                 Escolha a operação patrimonial para iniciar a coleta em campo
@@ -540,8 +540,8 @@ export default function App() {
                 <History className="w-4 h-4 text-[#ff7a7a]" />
                 <span>
                   {history.length === 0
-                    ? 'Nenhum registo efetuado hoje'
-                    : `${history.length} registo(s) efetuado(s) nesta sessão`}
+                    ? 'Nenhum registro efetuado hoje'
+                    : `${history.length} registro(s) efetuado(s) nesta sessão`}
                 </span>
               </div>
               {history.length > 0 && (
@@ -592,12 +592,12 @@ export default function App() {
                 {currentView === 'sobra' ? (
                   <>
                     <PackagePlus className="w-5 h-5 text-[#ff7a7a] shrink-0" />
-                    <span>Registo de Bem Não Cadastrado</span>
+                    <span>Registro de Bem Não Cadastrado</span>
                   </>
                 ) : (
                   <>
                     <PackageX className="w-5 h-5 text-amber-600 shrink-0" />
-                    <span>Registo de Bem Inservível</span>
+                    <span>Registro de Bem Inservível</span>
                   </>
                 )}
               </h2>
