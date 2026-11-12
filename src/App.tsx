@@ -27,6 +27,7 @@ import { PhotoUploader } from './components/PhotoUploader';
 import { SuccessBanner } from './components/SuccessBanner';
 import { HistoryDrawer } from './components/HistoryDrawer';
 import { PendingSyncBanner } from './components/PendingSyncBanner';
+import { SearchableLocationSelect } from './components/SearchableLocationSelect';
 
 import { PhotoAttachment, HistoryRecord, WebhookPayload, BeforeInstallPromptEvent } from './types';
 import { 
@@ -608,7 +609,7 @@ export default function App() {
               </p>
             </div>
 
-            {/* CAMPO 1: LOCALIZAÇÃO (MENU PENDENTE SELECT OBRIGATÓRIO) */}
+            {/* CAMPO 1: LOCALIZAÇÃO (PESQUISÁVEL E OBRIGATÓRIO) */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label htmlFor="localizacao-select" className="block text-xs font-bold uppercase tracking-wider text-slate-700">
@@ -617,41 +618,18 @@ export default function App() {
                 <span className="text-[11px] text-slate-400 font-medium">Obrigatório</span>
               </div>
 
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <MapPin className="w-5 h-5 text-[#ff7a7a]" />
-                </div>
-
-                <select
-                  id="localizacao-select"
-                  required
-                  value={localizacao}
-                  onChange={(e) => {
-                    setLocalizacao(e.target.value);
-                    if (validationError) setValidationError(null);
-                  }}
-                  className={`w-full pl-11 pr-10 py-3.5 bg-white border rounded-xl text-slate-900 focus:outline-none focus:ring-2 text-sm shadow-2xs transition-all font-medium appearance-none cursor-pointer ${
-                    !localizacao ? 'text-slate-400' : 'text-slate-900'
-                  } ${
-                    validationError && !localizacao
-                      ? 'border-rose-400 focus:ring-rose-500 focus:border-rose-500'
-                      : 'border-slate-300 focus:ring-[#ff7a7a] focus:border-[#ff7a7a]'
-                  }`}
-                >
-                  <option value="" disabled>
-                    Selecione a localização...
-                  </option>
-                  {LOCAIS_PREDEFINIDOS.map((loc) => (
-                    <option key={loc} value={loc} className="text-slate-900">
-                      {loc}
-                    </option>
-                  ))}
-                </select>
-
-                <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
-                  <ChevronDown className="w-5 h-5" />
-                </div>
-              </div>
+              <SearchableLocationSelect
+                id="localizacao-select"
+                required
+                value={localizacao}
+                options={LOCAIS_PREDEFINIDOS}
+                hasError={Boolean(validationError && !localizacao)}
+                onChange={(val) => {
+                  setLocalizacao(val);
+                  if (validationError) setValidationError(null);
+                }}
+                placeholder="Pesquisar ou selecionar localização..."
+              />
             </div>
 
             {/* CAMPO 2: DESCRIÇÃO DO BEM (OBRIGATÓRIO) */}
