@@ -28,6 +28,7 @@ import { SuccessBanner } from './components/SuccessBanner';
 import { HistoryDrawer } from './components/HistoryDrawer';
 import { PendingSyncBanner } from './components/PendingSyncBanner';
 import { SearchableLocationSelect } from './components/SearchableLocationSelect';
+import { AppBethaBanner } from './components/AppBethaBanner';
 
 import { PhotoAttachment, HistoryRecord, WebhookPayload, BeforeInstallPromptEvent } from './types';
 import { 
@@ -555,6 +556,9 @@ export default function App() {
                 </button>
               )}
             </div>
+
+            {/* Acesso Rápido ao App Oficial Betha Patrimônio (Google Play) */}
+            <AppBethaBanner />
           </div>
         )}
 
